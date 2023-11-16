@@ -23,6 +23,7 @@ const App = (): JSX.Element => {
         <Stack.Screen options={{ title: "Back", headerTintColor: "#000" }} name="forgotPassword" component={forgotPassword}></Stack.Screen>
         <Stack.Screen name="ShoppingCart" component={ShoppingCart} ></Stack.Screen>
         <Stack.Screen name="favorites">
+
           {
             () => (
               <Favorite favorites={favorites} setFavorite={setFavorites} > </Favorite>
@@ -41,10 +42,9 @@ const App = (): JSX.Element => {
               <Icon onPress={() => (navigation.navigate("login"))} name="logout" size={24} > </Icon>)
           }
         }} name="home">
-          {
-            () => (
-              <Home shoppingCart={shoppingCart} setShoppingCart={setShoppingCart} favorites={favorites} setFavorite={setFavorites}></Home>
-            )
+          {() => (
+            <Home shoppingCart={shoppingCart} setShoppingCart={setShoppingCart} favorites={favorites} setFavorites={setFavorites} />
+          )
           }</Stack.Screen>
 
       </Stack.Navigator>
