@@ -1,20 +1,22 @@
+const { json } = require('express')
 const userModel = require('../models/userModel')
-const jwtService = require('jsonwebtoken')
+const jsonWebToken = require('jsonwebtoken')
 
 module.exports = {
 
     login: async (req, res) => {
         try {
             const result = await userModel.findOne({ login: req.body.login, senha: req.body.senha })
-            if (result.length) {
-                const secret = process.env.secret
-                const tokenResult = await jwtService.sign(req.body, secret)
-                res.status(200).json({ massage: "Usuario logado", token: tokenResult })
-            } else {
-                res.status(403).json({ massage: "Credencias invalidas" })
+            console.log(JSON.stringify(result))
+            if (result) {
+                const secret = 'enfvioçnhvewrjkbfrejvbnvjetnvjkrbvgrvrtiuvlhetvuebjvertvrebvjkrgbvertjkvbrjuhfdtghnioreucgheycubgecbygcguweguvgeknbvgeurgbkukevugkceyvkcueg'
+                const token = await jsonWebToken.sign(req.body, secret)
+                res.status(200).json({ message: 'Usuario logado com sucesso', userData: { token: token, login: req.body.login, nome: result.nome } })
             }
+
         } catch (err) {
-            res.status(403).send({ massage: err.massage })
+            res.status(500).json({ massage: "Dados Incorretos" })
+
         }
     },
     getUsers: (req, res) => {
@@ -27,7 +29,7 @@ module.exports = {
     },
     deleteUserById: async (req, res) => {
         try {
-            await userModel.deleteOne({ cpf: req.params.id })
+            await userModel.deleteOne({ email: req.params.id })
             res.status(200).json({ massage: "Usuario removido com sucesso" })
 
 
@@ -46,7 +48,7 @@ module.exports = {
     },
     updateUser: async (req, res) => {
         try {
-            const findResult = await userMode.find({ mat: req.body.mat }, req.body)
+            await userModel.updateOne({ mat: req.boby.mat }, req.boby)
             res.status(200).send({ massage: "usuario atualizado com sucesso" })
         } catch (err) {
             res.status(500).json({ massage: "Não foi possivel atualizar os dados " })
@@ -60,7 +62,7 @@ module.exports = {
                 res.status(500).json({ massage: "Usuario já existe" })
             } else {
                 const createResult = await userModel.create(req.body)
-                res.status(201).json({ massage: 'O usuario ${createResult._doc.name} foi criado com sucesso' })
+                res.status(200).json({ massage: 'O usuario ${createResult._doc.name} foi criado com sucesso' })
             }
         } catch (err) {
             res.status(403).send({ massage: " Não foi possivel criar o usuario " })

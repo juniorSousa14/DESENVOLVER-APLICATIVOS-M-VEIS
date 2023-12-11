@@ -2,7 +2,7 @@ const jwtService = require('jsonwebtoken')
 
 module.exports = async (req, res, next) => {
     const route = req.path
-    const nonSecurityRoutes = ['/createUser', '/api/login']
+    const nonSecurityRoutes = ['/api/createUser', '/api/login']
     if (nonSecurityRoutes.includes(route) || route.includes('view')) {
         return next()
     }
@@ -13,7 +13,7 @@ module.exports = async (req, res, next) => {
         return
     }
     token = token.split(' ')[1]
-    const secret = ffvndvnknfjhifhnfmvkfndmfbvevbeevhnebuivlebfehvckefbevhuiegruyfjjgdthksdkhtfxmfyjfuykj
+    const secret = process.env.secret
     try {
         await jwtService.verify(token, secret)
         return next()
